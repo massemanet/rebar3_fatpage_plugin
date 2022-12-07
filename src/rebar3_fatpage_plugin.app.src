@@ -1,0 +1,13 @@
+{application,
+ rebar3_fatpage_plugin,
+ [{description, "A rebar3 plugin for compiling .abnf files"},
+  {vsn, "0.0.0"},
+  {applications,
+   [kernel,
+    stdlib,
+    fatpage
+   ]},
+  {maintainers, ["massemanet"]},
+  {licenses, ["MIT"]},
+  {links, [{"Github", "https://github.com/massemanet/rebar3_fatpage_plugin"}]}
+ ]}.
