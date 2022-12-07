@@ -33,8 +33,7 @@ init(State) ->
 -spec do(rebar_state:t()) -> {ok, rebar_state:t()}.
 do(State) ->
     {Args, []} = rebar_state:command_parsed_args(State),
-    AppInfos = app_infos(State),
-    lists:foreach(fun(AppInfo) -> compile(AppInfo, Args) end, AppInfos),
+    compile(Args),
     {ok, State}.
 
 -spec format_error(any()) ->  iolist().
@@ -43,22 +42,5 @@ format_error(Reason) ->
 
 %% ===================================================================
 
-app_infos(State) ->
-    case rebar_state:current_app(State) of
-        undefined -> rebar_state:project_apps(State);
-        AppInfo -> [AppInfo]
-    end.
-
-compile(AppInfo, Args) ->
-    rebar3_fatpage_compiler:compile(opts(AppInfo), Args).
-
-opts(AppInfo) ->
-    Opts0 = #{o => filename:join(rebar_app_info:out_dir(AppInfo), ebin),
-              app_dir => rebar_app_info:dir(AppInfo)},
-    maps:merge(Opts0, fatpage_opts(AppInfo)).
-
-fatpage_opts(AppInfo) ->
-    case dict:find(fatpage_opts, rebar_app_info:opts(AppInfo)) of
-        error -> #{};
-        {ok, FatpageOpts} -> maps:from_list(dict:to_list(FatpageOpts))
-    end.
+compile(Args) ->
+    rebar3_fatpage_compiler:compile(Args).
